@@ -145,4 +145,13 @@ if __name__ == "__main__":
         logger.error("Variable de entorno GCP_PROJECT_ID no definida.")
         sys.exit(1)
 
-    run_pipeline(project_id=project_id, dataset_id=dataset_id)
+    # Saltar fuentes sin credenciales configuradas
+    skip_ml = not os.environ.get("ML_CLIENT_ID") or os.environ.get("ML_CLIENT_ID") == "1234567890"
+    skip_chipax = not os.environ.get("CHIPAX_API_KEY") or os.environ.get("CHIPAX_API_KEY").startswith("xxx")
+
+    run_pipeline(
+        project_id=project_id,
+        dataset_id=dataset_id,
+        skip_mercadolibre=skip_ml,
+        skip_chipax=skip_chipax,
+    )
