@@ -7,6 +7,7 @@ Autenticación: POST /login con app_id + secret_key → JWT token
 """
 
 import os
+import time
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -76,6 +77,7 @@ class ChipaxExtractor:
                     if page >= total_pages:
                         break
                     page += 1
+                    time.sleep(0.5)  # Evitar rate limit
 
             logger.info(f"  → {len(all_rows)} {label} extraídos.")
             return all_rows
