@@ -73,8 +73,11 @@ class ChipaxExtractor:
                     rows = data.get("items", data.get("data", []))
                     all_rows.extend(rows)
                     pagination = data.get("paginationAttributes", {})
+                    total_count = pagination.get("count", len(all_rows))
                     total_pages = pagination.get("totalPages", 1)
-                    if page >= total_pages:
+                    if page >= total_pages or len(all_rows) >= total_count:
+                        # Recortar exactamente al total real (última página puede repetir)
+                        all_rows = all_rows[:total_count]
                         break
                     page += 1
                     time.sleep(0.5)  # Evitar rate limit
