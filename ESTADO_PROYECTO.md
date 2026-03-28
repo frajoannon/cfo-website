@@ -8,7 +8,7 @@
 
 | Componente | Herramienta | Detalle |
 |---|---|---|
-| Código fuente | GitHub | github.com/frajoannon/cfo-website |
+| Código fuente | GitHub | github.com/frajoannon/cfo |
 | Ejecución del pipeline | GitHub Actions | Corre automático todos los días a las 6 AM Chile |
 | Data warehouse | Google BigQuery | Proyecto: cfo-as-a-service-490915 |
 | Visualización | Power BI / Looker Studio | Conectado a BigQuery vía importación |
@@ -44,7 +44,7 @@
 ## Estructura del repositorio
 
 ```
-cfo-website/
+cfo/
 ├── CONTEXTO_NEGOCIO.md
 ├── ESTADO_PROYECTO.md
 ├── index.html

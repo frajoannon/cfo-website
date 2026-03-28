@@ -18,7 +18,7 @@ client = bigquery.Client(project=project)
 
 VIEWS = {
 
-    # ── 1. Órdenes limpias ────────────────────────────────────────────────────
+    # ── Órdenes limpias — una fila por orden ──────────────────────────────────
     "shopify_orders_clean": f"""
         SELECT
             id,
@@ -36,42 +36,6 @@ VIEWS = {
             customer_email
         FROM `{project}.{dataset}.shopify_orders`
         WHERE financial_status IN ('paid', 'partially_refunded', 'refunded')
-    """,
-
-    # ── 2. Ventas diarias ─────────────────────────────────────────────────────
-    "shopify_daily_sales": f"""
-        SELECT
-            dia,
-            mes,
-            COUNT(*)                        AS num_ordenes,
-            SUM(ingreso_bruto)              AS ingreso_bruto,
-            SUM(descuentos)                 AS descuentos,
-            SUM(ingreso_neto)               AS ingreso_neto,
-            AVG(ingreso_neto)               AS ticket_promedio,
-            COUNTIF(estado_pago = 'refunded') AS num_devoluciones
-        FROM `{project}.{dataset}.shopify_orders_clean`
-        GROUP BY dia, mes
-        ORDER BY dia DESC
-    """,
-
-    # ── 3. Resumen mensual ────────────────────────────────────────────────────
-    "shopify_monthly_summary": f"""
-        SELECT
-            mes,
-            COUNT(*)                            AS num_ordenes,
-            COUNT(DISTINCT customer_email)      AS clientes_unicos,
-            SUM(ingreso_bruto)                  AS ingreso_bruto,
-            SUM(descuentos)                     AS descuentos,
-            SUM(ingreso_neto)                   AS ingreso_neto,
-            AVG(ingreso_neto)                   AS ticket_promedio,
-            SUM(ingreso_neto)
-                / NULLIF(COUNT(DISTINCT customer_email), 0) AS ingreso_por_cliente,
-            COUNTIF(estado_pago = 'refunded')   AS num_devoluciones,
-            SUM(CASE WHEN estado_pago = 'refunded'
-                THEN ingreso_neto ELSE 0 END)   AS monto_devuelto
-        FROM `{project}.{dataset}.shopify_orders_clean`
-        GROUP BY mes
-        ORDER BY mes DESC
     """,
 }
 
@@ -93,10 +57,8 @@ for name, query in VIEWS.items():
     create_view(name, query)
 
 print(f"""
-Listo. Vistas disponibles en BigQuery:
+Listo. Vista disponible en BigQuery:
   • {dataset}.shopify_orders_clean
-  • {dataset}.shopify_daily_sales
-  • {dataset}.shopify_monthly_summary
 
-Conéctate desde Power BI a estas vistas en vez de a las tablas raw.
+Conéctate desde Looker Studio a esta vista en vez de a la tabla raw.
 """)

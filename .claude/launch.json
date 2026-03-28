@@ -4,7 +4,7 @@
     {
       "name": "finetrix-preview",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "3000", "--directory", "/Users/francisco/Desktop/cfo-website"],
+      "runtimeArgs": ["-m", "http.server", "3000", "--directory", "/Users/francisco/Desktop/cfo"],
       "port": 3000
     }
   ]
